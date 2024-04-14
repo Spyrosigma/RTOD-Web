@@ -2,7 +2,7 @@
     "builds": [
         {
             "src": "app.py",
-            "use": "@vercel/build",
+            "use": "@vercel/python",
             "config": {
                 "buildCommand": "pip install -r requirements.txt"
             }
