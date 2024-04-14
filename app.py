@@ -2,7 +2,6 @@ import cv2
 from flask import Flask, Response, render_template
 import numpy as np
 from ultralytics import YOLO
-from PIL import Image
 from flask_cors import CORS
 
 app = Flask(__name__)
