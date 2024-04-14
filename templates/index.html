@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Object Detection</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+
+</head>
+
+<body>
+  <h1>Real-Time Object Detection with YOLOv8n</h1>
+  <br>
+  <div class="cards">
+    <a href="/image">
+      <div class="card">
+        Image
+        <br><br>
+        <img src="{{url_for('static',filename='photo.png')}}" alt="">
+      </div>
+    </a>
+    <a href="/webcam">
+      <div class="card">
+        Webcam
+        <br><br>
+        <img src="{{url_for('static',filename='webcam.png')}}" alt="">
+      </div>
+    </a>
+    <a href="/video">
+      <div class="card">
+        Video
+        <br><br>
+        <img src="{{url_for('static',filename='video.png')}}" alt="">
+      </div>
+    </a>
+  </div>
+</body>
+
+</html>

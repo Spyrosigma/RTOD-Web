@@ -1,0 +1,37 @@
+body {
+    background:linear-gradient(90deg,rgb(15, 15, 15),rgb(70, 92, 94) );
+    color: white;
+    text-align: center;
+}
+a{
+    color: white;
+    text-decoration: none;
+    inherits: none;
+    width: 30%;
+}
+.cards {
+    margin: 2vh;
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+}
+
+.card {
+    font-size: x-large;
+    border: 5px solid black;
+    border-radius: 5px;
+    padding: 2vh;
+    height: 40vh;
+    border: 2px solid rgb(0, 0, 0);
+    box-shadow: white 0px 0px 10px;
+}
+.card:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+img{
+    border-radius: 5px;
+    max-width: 80%;
+    max-height: 60%;
+}

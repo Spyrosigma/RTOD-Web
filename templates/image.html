@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+
+</head>
+<body>
+    <h1>Object Detection Using Image</h1>
+    <br>
+    <form action="/image" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <img src="{{url_for('image')}}">
+    <br>
+    <a href="/"> <button>Back</button></a>
+</body>
+</html>
