@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RTOB-Video</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
 </head>
+
 <body>
     <h1>Object Detection Using Video</h1>
     <br>
@@ -14,10 +16,22 @@
         <button type="submit">Submit</button>
     </form>
     <br>
-    <div>
-        {{ url_for('video') }}
+    <p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </p>
+    {% if filename %}
+    <div class="Predicted_image">
+        <img src="{{ url_for('display_video', filename=filename) }}">
     </div>
+    {% endif %}
     <br>
     <a href="/"> <button>Back</button></a>
 </body>
+
 </html>

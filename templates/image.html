@@ -11,11 +11,25 @@
     <h1>Object Detection Using Image</h1>
     <br>
     <form action="/image" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file"><br><br>
-        <button type="submit">Submit</button>
+        <input type="file" name="file" required><br><br>
+        <input type="submit" value="Submit"><br>
     </form>
+    <br><br>
+    <p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </p>
+    {% if filename %}
+        <div class="Predicted_image">
+            <img src="{{ url_for('display_image', filename=filename) }}">
+        </div>
+    {% endif %}
     <br>
-    <img src="{{url_for('image')}}">
     <br>
     <a href="/"> <button>Back</button></a>
 </body>

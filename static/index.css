@@ -46,3 +46,9 @@ footer{
     text-align: center;
     padding: 1vh;
 }
+.Predicted_image{
+    margin: auto;
+    width: 50%;
+    height: 50%;
+    border-radius: 5px;
+}
