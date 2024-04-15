@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Object Detection using Video</title>
+    <title>RTOB-Video</title>
   <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
 </head>
 <body>
@@ -14,9 +14,9 @@
         <button type="submit">Submit</button>
     </form>
     <br>
-    <video width="640" height="480" controls>
-        <source src="{{url_for('video')}}" type="video/mp4">
-    </video>
+    <div>
+        {{ url_for('video') }}
+    </div>
     <br>
     <a href="/"> <button>Back</button></a>
 </body>

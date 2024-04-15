@@ -35,3 +35,14 @@ img{
     max-width: 80%;
     max-height: 60%;
 }
+
+footer{
+    font-size: large;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    text-align: center;
+    padding: 1vh;
+}
