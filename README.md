@@ -17,8 +17,8 @@
     pip install -r requirements.txt
     ```
     
-4. Create a .env file and add your own random Secret Key.
-   **SECRET_KEY='uhvki565$55d'**
+4. Create a .env file and add your own random Secret Key. For Example: 
+   (**SECRET_KEY='uhvki565$55d'**)
 
 6. Run the app!
     ```bash
