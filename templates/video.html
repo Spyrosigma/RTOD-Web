@@ -12,7 +12,7 @@
     <h1>Object Detection Using Video</h1>
     <br>
     <form action="/video" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file">
+        <input type="file" name="file" required>
         <button type="submit">Submit</button>
     </form>
     <br>
@@ -26,8 +26,8 @@
         {% endwith %}
     </p>
     {% if filename %}
-    <div class="Predicted_image">
-        <img src="{{ url_for('display_video', filename=filename) }}">
+    <div style="border: 2px solid red; margin: auto;">
+        <video src="{{ url_for('display_video', filename=filename)}}"></video>
     </div>
     {% endif %}
     <br>

@@ -13,8 +13,7 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
-app.config['MODEL_FOLDER'] = 'static/outputs/'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MODEL_FOLDER'] = 'static/model/'
 
 IMAGE_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 def allowed_image_file(filename):
@@ -24,40 +23,6 @@ VIDEO_ALLOWED_EXTENSIONS = set(['mp4', 'avi'])
 def allowed_video_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in VIDEO_ALLOWED_EXTENSIONS
 
-
-def resize_video(input_video_path, output_video_path,
-                new_width, new_height):
-    cap = cv2.VideoCapture(input_video_path)
-    if not cap.isOpened():
-        print("Error opening video:", input_video_path)
-        return
-    
-    original_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    original_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    fourcc = cv2.VideoWriter_fourcc(*"XVID") #codec
-
-    scale_ratio = min(new_width / original_width, new_height / original_height)
-    new_width = int(original_width * scale_ratio)
-    new_height = int(original_height * scale_ratio)
-
-    writer = cv2.VideoWriter(output_video_path, fourcc, fps, (new_width, new_height))
-
-    while True:
-        success, frame = cap.read()
-        if not success:
-            print("Error reading frame.")
-            break
-
-        resized_frame = cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_AREA)
-        writer.write(resized_frame)
-
-        cv2.imshow('Resized Video', resized_frame)
-
-        if cv2.waitKey(1) & 0xFF == ord("q") or not success:
-            break
-    cap.release()
-    writer.release()
 
 #-------------------Routes-----------------
 
@@ -75,6 +40,7 @@ def image():
 @app.route('/image', methods=['POST'])
 def upload_image():
     file = request.files['file']
+    print('File:',file,'\nFileName',file.filename)
     if file and allowed_image_file(file.filename):
         filename = file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -83,7 +49,7 @@ def upload_image():
             im_array = r.plot() 
             im = Image.fromarray(im_array[..., ::-1]) 
             im.save(os.path.join(app.config['MODEL_FOLDER'], filename))
-        flash('Image successfully uploaded and displayed below')
+        flash('Image successfully uploaded, Processed and Detected Objects are shown below')
         return render_template('image.html', filename=filename)
     else:
         flash('WRONG Image Type !! Allowed image types are - png, jpg, jpeg')
@@ -91,7 +57,7 @@ def upload_image():
  
 @app.route('/display/<filename>')
 def display_image(filename):
-    return redirect(url_for('static', filename='model/' + filename), code=301)
+    return redirect(url_for('static', filename='model/' + filename))
 
 
 #-------------------Webcam-----------------
@@ -115,6 +81,7 @@ def webcam():
                 )
     return Response(WebcamDetection(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
+
 #-------------------Video-----------------
 
 @app.route("/video")
@@ -127,10 +94,23 @@ def upload_video():
     if file and allowed_video_file(file.filename):
         filename = file.filename
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-        #resize_video(os.path.join(app.config["UPLOAD_FOLDER"], filename), os.path.join(app.config["MODEL_FOLDER"], filename), 640, 480)
-        results = model(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-        for result in results:
-            result.save(os.path.join(app.config["MODEL_FOLDER"], filename))
+        def save_predicted_video(input_video_path, output_video_path):
+            cap = cv2.VideoCapture(input_video_path)
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
+
+            while cap.isOpened():
+                success, frame = cap.read()
+                if success:
+                    results = model(frame)
+                    annotated_frame = results[0].plot()
+                    out.write(annotated_frame)
+                else:
+                    break
+        save_predicted_video(os.path.join(app.config["UPLOAD_FOLDER"], filename), os.path.join(app.config["MODEL_FOLDER"], filename))
         flash("Video successfully uploaded")
         return render_template("video.html", filename=filename)
     else:
@@ -139,4 +119,9 @@ def upload_video():
 
 @app.route("/display_video/<filename>")
 def display_video(filename):
-    return redirect(url_for("static", filename="model/" + filename), code=301)
+    return redirect(url_for("static", filename="model/" + filename))
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
