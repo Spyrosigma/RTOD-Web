@@ -122,6 +122,3 @@ def display_video(filename):
     return redirect(url_for("static", filename="model/" + filename))
 
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
